@@ -1,0 +1,106 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\QuizResource;
+use App\Http\Resources\QuizDetailResource;
+use App\Models\Quiz;
+use App\Models\QuizResult;
+use App\Models\Answer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class QuizController extends Controller
+{
+    public function index()
+    {
+        $quizzes = Quiz::where('is_published', true)
+            ->withCount('questions')
+            ->get();
+
+        return QuizResource::collection($quizzes);
+    }
+
+    public function show(Quiz $quiz)
+    {
+        if (!$quiz->is_published) {
+            return response()->json([
+                'message' => 'Quiz not found or not published.',
+            ], 404);
+        }
+
+        $quiz->load(['questions.options']);
+
+        return new QuizDetailResource($quiz);
+    }
+
+    public function submit(Request $request, Quiz $quiz)
+    {
+        if (!$quiz->is_published) {
+            return response()->json([
+                'message' => 'Quiz not found or not published.',
+            ], 404);
+        }
+
+        $request->validate([
+            'answers' => 'required|array',
+            'answers.*.question_id' => 'required|exists:questions,id',
+            'answers.*.selected_option_id' => 'required|exists:options,id',
+            'time_taken' => 'nullable|integer|min:0',
+        ]);
+
+        // Check if user has already taken this quiz
+        $existingResult = QuizResult::where('user_id', Auth::id())
+            ->where('quiz_id', $quiz->id)
+            ->first();
+
+        if ($existingResult) {
+            return response()->json([
+                'message' => 'You have already taken this quiz.',
+            ], 400);
+        }
+
+        // Calculate score
+        $score = 0;
+        $questions = $quiz->questions()->with('options')->get();
+
+        foreach ($request->answers as $answer) {
+            $question = $questions->find($answer['question_id']);
+            if ($question) {
+                $selectedOption = $question->options->find($answer['selected_option_id']);
+                if ($selectedOption && $selectedOption->is_correct) {
+                    $score++;
+                }
+            }
+        }
+
+        // Create quiz result
+        $quizResult = QuizResult::create([
+            'user_id' => Auth::id(),
+            'quiz_id' => $quiz->id,
+            'score' => $score,
+            'time_taken' => $request->time_taken,
+        ]);
+
+        // Record answers
+        foreach ($request->answers as $answer) {
+            Answer::create([
+                'quiz_result_id' => $quizResult->id,
+                'question_id' => $answer['question_id'],
+                'selected_option_id' => $answer['selected_option_id'],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Quiz submitted successfully',
+            'result' => [
+                'id' => $quizResult->id,
+                'score' => $score,
+                'total_questions' => $questions->count(),
+                'percentage' => round(($score / $questions->count()) * 100, 2),
+                'time_taken' => $request->time_taken,
+            ],
+        ], 201);
+    }
+}
