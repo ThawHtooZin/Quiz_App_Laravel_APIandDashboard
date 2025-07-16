@@ -9,7 +9,7 @@
         <p class="text-gray-600">Fill in the details below to create a new quiz.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
         <form action="{{ route('quizzes.store') }}" method="POST" class="p-6 space-y-6">
             @csrf
 
@@ -35,7 +35,7 @@
                 <label for="time_limit" class="block text-sm font-medium text-gray-700">Time Limit (minutes)</label>
                 <input type="number" name="time_limit" id="time_limit" value="{{ old('time_limit') }}" min="1"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                <p class="mt-1 text-sm text-gray-500">Leave empty for no time limit</p>
+                <p class="mt-1 text-sm text-gray-600">Leave empty for no time limit</p>
                 @error('time_limit')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -50,10 +50,10 @@
             </div>
 
             <div class="flex items-center justify-end space-x-3">
-                <a href="{{ route('quizzes.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-medium">
+                <a href="{{ route('quizzes.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors">
                     Cancel
                 </a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     Create Quiz
                 </button>
             </div>

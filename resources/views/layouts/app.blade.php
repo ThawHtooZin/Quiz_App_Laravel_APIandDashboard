@@ -19,12 +19,12 @@
         <!-- Sidebar -->
         <div class="bg-white shadow-lg w-64 min-h-screen">
             <div class="p-6">
-                <h1 class="text-2xl font-bold text-gray-800">Quiz App Admin</h1>
+                <h1 class="text-2xl font-bold text-gray-900">Quiz App Admin</h1>
             </div>
             
             <nav class="mt-6">
                 <div class="px-4 space-y-2">
-                    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
@@ -32,21 +32,21 @@
                         Dashboard
                     </a>
                     
-                    <a href="{{ route('quizzes.index') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 {{ request()->routeIs('quizzes.*') ? 'bg-blue-50 text-blue-700' : '' }}">
+                    <a href="{{ route('quizzes.index') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors {{ request()->routeIs('quizzes.*') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         Quizzes
                     </a>
                     
-                    <a href="{{ route('users.index') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 {{ request()->routeIs('users.*') && !request()->routeIs('users.results') ? 'bg-blue-50 text-blue-700' : '' }}">
+                    <a href="{{ route('users.index') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors {{ request()->routeIs('users.*') && !request()->routeIs('users.results') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                         </svg>
                         Users
                     </a>
                     
-                    <a href="{{ route('users.results') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 {{ request()->routeIs('users.results') ? 'bg-blue-50 text-blue-700' : '' }}">
+                    <a href="{{ route('users.results') }}" class="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors {{ request()->routeIs('users.results') ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700' : '' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
@@ -59,18 +59,18 @@
         <!-- Main Content -->
         <div class="flex-1">
             <!-- Top Navigation -->
-            <header class="bg-white shadow-sm border-b">
+            <header class="bg-white shadow-sm border-b border-gray-200">
                 <div class="px-6 py-4">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-xl font-semibold text-gray-800">
+                        <h2 class="text-xl font-semibold text-gray-900">
                             @yield('title', 'Dashboard')
                         </h2>
                         
                         <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-600">Welcome, {{ Auth::user()->name }}</span>
+                            <span class="text-sm text-gray-700">Welcome, {{ Auth::user()->name }}</span>
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="text-sm text-red-600 hover:text-red-800 font-medium">
+                                <button type="submit" class="text-sm text-red-600 hover:text-red-800 font-medium transition-colors">
                                     Logout
                                 </button>
                             </form>
@@ -82,13 +82,13 @@
             <!-- Page Content -->
             <main class="p-6">
                 @if(session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                    <div class="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if(session('error'))
-                    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
                         {{ session('error') }}
                     </div>
                 @endif

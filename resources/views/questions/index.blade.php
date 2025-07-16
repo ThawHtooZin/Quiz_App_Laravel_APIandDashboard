@@ -10,7 +10,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Questions for: {{ $quiz->title }}</h1>
             <p class="text-gray-600">{{ $questions->count() }} questions</p>
         </div>
-        <a href="{{ route('quizzes.questions.create', $quiz) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium">
+        <a href="{{ route('quizzes.questions.create', $quiz) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
             Add Question
         </a>
     </div>
@@ -19,16 +19,16 @@
     <div class="space-y-4">
         @if($questions->count() > 0)
             @foreach($questions as $index => $question)
-            <div class="bg-white rounded-lg shadow-sm border">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-lg font-semibold text-gray-900">Question {{ $index + 1 }}</h3>
                         <div class="flex items-center space-x-2">
-                            <a href="{{ route('quizzes.questions.edit', [$quiz, $question]) }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">Edit</a>
+                            <a href="{{ route('quizzes.questions.edit', [$quiz, $question]) }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition-colors">Edit</a>
                             <form action="{{ route('quizzes.questions.destroy', [$quiz, $question]) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this question?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
+                                <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium transition-colors">Delete</button>
                             </form>
                         </div>
                     </div>
@@ -60,9 +60,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 <h3 class="mt-2 text-sm font-medium text-gray-900">No questions</h3>
-                <p class="mt-1 text-sm text-gray-500">Get started by adding questions to this quiz.</p>
+                <p class="mt-1 text-sm text-gray-600">Get started by adding questions to this quiz.</p>
                 <div class="mt-6">
-                    <a href="{{ route('quizzes.questions.create', $quiz) }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                    <a href="{{ route('quizzes.questions.create', $quiz) }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors">
                         Add Question
                     </a>
                 </div>
@@ -72,7 +72,7 @@
 
     <!-- Back to Quiz -->
     <div class="mt-6">
-        <a href="{{ route('quizzes.show', $quiz) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+        <a href="{{ route('quizzes.show', $quiz) }}" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
             ← Back to Quiz
         </a>
     </div>

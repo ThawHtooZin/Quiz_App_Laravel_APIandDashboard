@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-6">
     <!-- Quiz Header -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900">{{ $quiz->title }}</h1>
@@ -21,39 +21,39 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="text-center p-4 bg-blue-50 rounded-lg">
-                <div class="text-2xl font-bold text-blue-600">{{ $quiz->questions_count }}</div>
-                <div class="text-sm text-gray-600">Questions</div>
+            <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="text-2xl font-bold text-blue-700">{{ $quiz->questions_count }}</div>
+                <div class="text-sm text-gray-700">Questions</div>
             </div>
-            <div class="text-center p-4 bg-green-50 rounded-lg">
-                <div class="text-2xl font-bold text-green-600">{{ $quiz->total_attempts }}</div>
-                <div class="text-sm text-gray-600">Attempts</div>
+            <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
+                <div class="text-2xl font-bold text-green-700">{{ $quiz->total_attempts }}</div>
+                <div class="text-sm text-gray-700">Attempts</div>
             </div>
-            <div class="text-center p-4 bg-purple-50 rounded-lg">
-                <div class="text-2xl font-bold text-purple-600">{{ $quiz->average_score }}</div>
-                <div class="text-sm text-gray-600">Avg Score</div>
+            <div class="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                <div class="text-2xl font-bold text-purple-700">{{ $quiz->average_score }}%</div>
+                <div class="text-sm text-gray-700">Avg Score</div>
             </div>
-            <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                <div class="text-2xl font-bold text-yellow-600">{{ $quiz->time_limit ? $quiz->time_limit . ' min' : 'No limit' }}</div>
-                <div class="text-sm text-gray-600">Time Limit</div>
+            <div class="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div class="text-2xl font-bold text-yellow-700">{{ $quiz->time_limit ? $quiz->time_limit . ' min' : 'No limit' }}</div>
+                <div class="text-sm text-gray-700">Time Limit</div>
             </div>
         </div>
     </div>
 
     <!-- Actions -->
-    <div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Actions</h2>
         <div class="flex flex-wrap gap-3">
-            <a href="{{ route('quizzes.questions.index', $quiz) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium">
+            <a href="{{ route('quizzes.questions.index', $quiz) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                 Manage Questions
             </a>
-            <a href="{{ route('quizzes.edit', $quiz) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+            <a href="{{ route('quizzes.edit', $quiz) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                 Edit Quiz
             </a>
             <form action="{{ route('quizzes.toggle-publish', $quiz) }}" method="POST" class="inline">
                 @csrf
                 @method('PATCH')
-                <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-medium">
+                <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     {{ $quiz->is_published ? 'Unpublish' : 'Publish' }}
                 </button>
             </form>
@@ -62,7 +62,7 @@
 
     <!-- Recent Results -->
     @if($quiz->quizResults->count() > 0)
-    <div class="bg-white rounded-lg shadow-sm">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
         <div class="p-6 border-b border-gray-200">
             <h2 class="text-xl font-semibold text-gray-900">Recent Results</h2>
         </div>
@@ -71,16 +71,16 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">User</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Percentage</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Date</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach($quiz->quizResults->take(10) as $result)
-                        <tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $result->user->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $result->score }}/{{ $quiz->questions_count }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $result->percentage }}%</td>
