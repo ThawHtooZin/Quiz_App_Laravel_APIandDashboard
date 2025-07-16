@@ -21,7 +21,18 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
   ```
 - **Response:**
   - `201 Created`
-  - Returns: `{ user, token }`
+  - Returns: `{ message, user, token }`
+  ```json
+  {
+    "message": "User registered successfully",
+    "user": {
+      "id": 9,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "token": "3|6jHdZ9dDHiijzwHKeRZOvvfIYVGybcg54dNuTmTZ638ff3b9"
+  }
+  ```
 
 ---
 
@@ -36,7 +47,18 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
   ```
 - **Response:**
   - `200 OK`
-  - Returns: `{ user, token }`
+  - Returns: `{ message, user, token }`
+  ```json
+  {
+    "message": "Login successful",
+    "user": {
+      "id": 9,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "token": "3|6jHdZ9dDHiijzwHKeRZOvvfIYVGybcg54dNuTmTZ638ff3b9"
+  }
+  ```
 
 ---
 
@@ -44,6 +66,15 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
 - **GET** `/api/profile`
 - **Headers:** `Authorization: Bearer <token>`
 - **Response:** `{ user }`
+  ```json
+  {
+    "user": {
+      "id": 9,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  }
+  ```
 
 ---
 
@@ -51,6 +82,11 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
 - **POST** `/api/logout`
 - **Headers:** `Authorization: Bearer <token>`
 - **Response:** `{ message }`
+  ```json
+  {
+    "message": "Logged out successfully"
+  }
+  ```
 
 ---
 
