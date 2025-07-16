@@ -38,21 +38,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Get quiz performance data for charts
-        $quizPerformance = Quiz::withCount('quizResults')
-            ->withAvg('quizResults', 'score')
-            ->whereHas('quizResults')
-            ->orderBy('quiz_results_count', 'desc')
-            ->take(5)
-            ->get()
-            ->map(function ($quiz) {
-                return [
-                    'title' => $quiz->title,
-                    'avg_score' => round($quiz->quiz_results_avg_score ?? 0, 1),
-                    'attempts' => $quiz->quiz_results_count
-                ];
-            });
-
         // Get user activity data for the last 7 days
         $userActivity = collect();
         for ($i = 6; $i >= 0; $i--) {
@@ -79,7 +64,6 @@ class DashboardController extends Controller
             'recentQuizzes', 
             'recentResults', 
             'topQuizzes',
-            'quizPerformance',
             'userActivity',
             'additionalStats'
         ));
