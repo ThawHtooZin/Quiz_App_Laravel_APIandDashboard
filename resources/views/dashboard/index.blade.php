@@ -4,92 +4,73 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Key Performance Indicators -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Quiz Engagement Card -->
-        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-blue-100 text-sm font-medium">Quiz Engagement</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $stats['total_attempts'] }}</p>
-                    <p class="text-blue-200 text-xs mt-1">Total attempts</p>
-                </div>
-                <div class="text-right">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+    <!-- Welcome & Quick Stats Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-8 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">Welcome back, Admin!</h1>
+                <p class="text-blue-100 text-lg">Here's what's happening with your quiz system today</p>
+            </div>
+            <div class="text-right">
+                <div class="text-4xl font-bold">{{ $stats['total_attempts'] }}</div>
+                <div class="text-blue-100">Total Quiz Attempts</div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats Row -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                     </div>
-                    <div class="mt-2">
-                        <span class="text-green-300 text-sm font-medium">+12%</span>
-                        <span class="text-blue-200 text-xs">vs last week</span>
+                    <div>
+                        <div class="text-2xl font-bold">{{ $stats['total_quizzes'] }}</div>
+                        <div class="text-blue-100 text-sm">Total Quizzes</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Average Performance Card -->
-        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-green-100 text-sm font-medium">Avg Performance</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $stats['average_score'] }}%</p>
-                    <p class="text-green-200 text-xs mt-1">Across all quizzes</p>
-                </div>
-                <div class="text-right">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                        </svg>
-                    </div>
-                    <div class="mt-2">
-                        <div class="w-full bg-white bg-opacity-20 rounded-full h-2">
-                            <div class="bg-white h-2 rounded-full transition-all duration-1000" style="width: {{ $stats['average_score'] }}%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Users Card -->
-        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-purple-100 text-sm font-medium">Active Users</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $additionalStats['active_users_today'] ?? 0 }}</p>
-                    <p class="text-purple-200 text-xs mt-1">Today's activity</p>
-                </div>
-                <div class="text-right">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                         </svg>
                     </div>
-                    <div class="mt-2">
-                        <div class="w-2 h-2 bg-green-300 rounded-full animate-pulse mx-auto"></div>
-                        <span class="text-purple-200 text-xs">Online</span>
+                    <div>
+                        <div class="text-2xl font-bold">{{ $stats['total_users'] }}</div>
+                        <div class="text-blue-100 text-sm">Registered Users</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Quiz Completion Rate -->
-        <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-orange-100 text-sm font-medium">Completion Rate</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ $stats['total_quizzes'] > 0 ? round(($stats['published_quizzes'] / $stats['total_quizzes']) * 100) : 0 }}%</p>
-                    <p class="text-orange-200 text-xs mt-1">{{ $stats['published_quizzes'] }}/{{ $stats['total_quizzes'] }} published</p>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">{{ $stats['average_score'] }}%</div>
+                        <div class="text-blue-100 text-sm">Avg Score</div>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            </div>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-4 backdrop-blur-sm">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-3">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <div class="mt-2">
-                        <span class="text-orange-300 text-sm font-medium">{{ $stats['published_quizzes'] }}</span>
-                        <span class="text-orange-200 text-xs">Live</span>
+                    <div>
+                        <div class="text-2xl font-bold">{{ $stats['published_quizzes'] }}</div>
+                        <div class="text-blue-100 text-sm">Published</div>
                     </div>
                 </div>
             </div>
