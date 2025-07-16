@@ -6,6 +6,8 @@ use App\Models\Quiz;
 use App\Models\User;
 use App\Models\QuizResult;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -20,6 +22,7 @@ class DashboardController extends Controller
         ];
 
         $recentQuizzes = Quiz::withCount(['questions', 'quizResults'])
+            ->withAvg('quizResults', 'score')
             ->latest()
             ->take(5)
             ->get();
@@ -30,10 +33,55 @@ class DashboardController extends Controller
             ->get();
 
         $topQuizzes = Quiz::withCount('quizResults')
+            ->withAvg('quizResults', 'score')
             ->orderBy('quiz_results_count', 'desc')
             ->take(5)
             ->get();
 
-        return view('dashboard.index', compact('stats', 'recentQuizzes', 'recentResults', 'topQuizzes'));
+        // Get quiz performance data for charts
+        $quizPerformance = Quiz::withCount('quizResults')
+            ->withAvg('quizResults', 'score')
+            ->whereHas('quizResults')
+            ->orderBy('quiz_results_count', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($quiz) {
+                return [
+                    'title' => $quiz->title,
+                    'avg_score' => round($quiz->quiz_results_avg_score ?? 0, 1),
+                    'attempts' => $quiz->quiz_results_count
+                ];
+            });
+
+        // Get user activity data for the last 7 days
+        $userActivity = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $attempts = QuizResult::whereDate('created_at', $date)->count();
+            $userActivity->push([
+                'date' => $date->format('M d'),
+                'attempts' => $attempts
+            ]);
+        }
+
+        // Get additional statistics
+        $additionalStats = [
+            'total_questions' => DB::table('questions')->count(),
+            'total_options' => DB::table('options')->count(),
+            'banned_users' => User::where('is_banned', true)->count(),
+            'active_users_today' => User::whereHas('quizResults', function($query) {
+                $query->whereDate('created_at', Carbon::today());
+            })->count(),
+        ];
+
+        return view('dashboard.index', compact(
+            'stats', 
+            'recentQuizzes', 
+            'recentResults', 
+            'topQuizzes',
+            'quizPerformance',
+            'userActivity',
+            'additionalStats'
+        ));
     }
 }
