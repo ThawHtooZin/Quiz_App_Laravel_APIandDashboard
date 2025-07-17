@@ -29,15 +29,17 @@ class QuizAttemptController extends Controller
             return redirect()->back()->with('error', 'This quiz is not available.');
         }
 
-        $questions = $quiz->questions()->with('options')->get();
+        $questionsQuery = $quiz->questions()->with('options');
+        
+        // Apply question pooling if question_limit is set
+        if ($quiz->question_limit) {
+            $questionsQuery = $questionsQuery->inRandomOrder()->take($quiz->question_limit);
+        }
+        
+        $questions = $questionsQuery->get();
         
         if ($questions->count() === 0) {
             return redirect()->back()->with('error', 'This quiz has no questions.');
-        }
-
-        // Apply question pooling if question_limit is set
-        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
-            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
         }
 
         // Shuffle options for each question
@@ -56,12 +58,14 @@ class QuizAttemptController extends Controller
             'time_taken' => 'nullable|integer|min:0',
         ]);
 
-        $questions = $quiz->questions()->with('options')->get();
+        $questionsQuery = $quiz->questions()->with('options');
         
         // Apply question pooling if question_limit is set (same as in take method)
-        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
-            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
+        if ($quiz->question_limit) {
+            $questionsQuery = $questionsQuery->inRandomOrder()->take($quiz->question_limit);
         }
+        
+        $questions = $questionsQuery->get();
         
         $score = 0;
 

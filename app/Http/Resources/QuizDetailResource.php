@@ -9,13 +9,14 @@ class QuizDetailResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        // Get questions with options
-        $questions = $this->questions()->with('options')->get();
+        // Get questions with options and apply question pooling if question_limit is set
+        $questionsQuery = $this->questions()->with('options');
         
-        // Apply question pooling if question_limit is set
-        if ($this->question_limit && $questions->count() > $this->question_limit) {
-            $questions = $questions->inRandomOrder()->take($this->question_limit);
+        if ($this->question_limit) {
+            $questionsQuery = $questionsQuery->inRandomOrder()->take($this->question_limit);
         }
+        
+        $questions = $questionsQuery->get();
         
         return [
             'id' => $this->id,

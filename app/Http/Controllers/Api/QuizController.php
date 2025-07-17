@@ -54,12 +54,14 @@ class QuizController extends Controller
 
         // Calculate score
         $score = 0;
-        $questions = $quiz->questions()->with('options')->get();
+        $questionsQuery = $quiz->questions()->with('options');
         
         // Apply question pooling if question_limit is set (same as in show method)
-        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
-            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
+        if ($quiz->question_limit) {
+            $questionsQuery = $questionsQuery->inRandomOrder()->take($quiz->question_limit);
         }
+        
+        $questions = $questionsQuery->get();
 
         foreach ($request->answers as $answer) {
             $question = $questions->find($answer['question_id']);
