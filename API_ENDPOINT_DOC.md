@@ -103,6 +103,7 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
       "title": "General Knowledge",
       "description": "A fun quiz",
       "time_limit": 60,
+      "question_limit": 5,
       "questions_count": 10,
       "created_at": "...",
       "updated_at": "..."
@@ -123,15 +124,17 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
     "title": "General Knowledge",
     "description": "A fun quiz",
     "time_limit": 60,
-    "questions_count": 10,
+    "question_limit": 5,
+    "questions_count": 5,
     "questions": [
       {
         "id": 101,
         "question_text": "What is 2+2?",
         "options": [
-          { "id": 1, "text": "3" },
-          { "id": 2, "text": "4" },
-          { "id": 3, "text": "5" }
+          { "id": 4, "text": "4" },
+          { "id": 2, "text": "3" },
+          { "id": 1, "text": "5" },
+          { "id": 3, "text": "2" }
         ]
       },
       ...
@@ -232,10 +235,49 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
 
 ---
 
+## New Features
+
+### Question Pooling & Limit Per Quiz
+- **Purpose:** Instead of every user answering the same set of questions, quizzes can have a large pool of questions with a limit on how many are shown per attempt.
+- **Implementation:** 
+  - Set `question_limit` when creating/editing a quiz
+  - If `question_limit` is set and there are more questions available, the API randomly selects `question_limit` questions per attempt
+  - If `question_limit` is null, all questions are shown
+- **Example:** A quiz with 20 questions and `question_limit: 10` will randomly show 10 different questions each time
+
+### Shuffled Options (ABCD Randomised)
+- **Purpose:** Prevent answer memorization by randomizing option order for each attempt.
+- **Implementation:**
+  - Options are shuffled at runtime for each quiz attempt
+  - Frontend should display options as A/B/C/D based on shuffled array index
+  - Submit `selected_option_id` (not "A" or "C") when answering
+- **Example:** 
+  ```json
+  // Question 1 options (shuffled)
+  "options": [
+    { "id": 4, "text": "Correct Answer" },
+    { "id": 2, "text": "Wrong Answer" },
+    { "id": 1, "text": "Wrong Answer" },
+    { "id": 3, "text": "Wrong Answer" }
+  ]
+  ```
+
+### Quiz Retakes
+- **Purpose:** Allow users to retake quizzes multiple times for practice and improvement.
+- **Implementation:**
+  - Removed the "one attempt per quiz" restriction
+  - Users can now submit the same quiz multiple times
+  - Each attempt creates a new quiz result record
+  - All attempts are tracked in the results history
+
+---
+
 ## Notes
 
 - All times are in UTC.
 - All endpoints return JSON.
 - All protected endpoints require a valid Sanctum token.
 - Quiz details never expose correct answers.
-- Quiz submission is allowed only once per quiz per user. 
+- Quiz submission is allowed multiple times per quiz per user (retakes enabled).
+- Questions are randomly selected from the pool if `question_limit` is set.
+- Options are shuffled for each attempt to prevent answer memorization. 
