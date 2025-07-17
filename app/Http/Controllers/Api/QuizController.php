@@ -30,7 +30,15 @@ class QuizController extends Controller
             ], 404);
         }
 
-        $quiz->load(['questions.options']);
+        $quiz->load([
+            'questions.options' => function ($query) {
+                $query->inRandomOrder();
+            }
+        ]);
+        
+        $questionLimit = $quiz->question_limit ?? $quiz->questions->count();
+        $shuffledQuestions = $quiz->questions->shuffle()->take($questionLimit);
+        $quiz->setRelation('questions', $shuffledQuestions);
 
         return new QuizDetailResource($quiz);
     }
@@ -49,17 +57,6 @@ class QuizController extends Controller
             'answers.*.selected_option_id' => 'required|exists:options,id',
             'time_taken' => 'nullable|integer|min:0',
         ]);
-
-        // Check if user has already taken this quiz
-        $existingResult = QuizResult::where('user_id', Auth::id())
-            ->where('quiz_id', $quiz->id)
-            ->first();
-
-        if ($existingResult) {
-            return response()->json([
-                'message' => 'You have already taken this quiz.',
-            ], 400);
-        }
 
         // Calculate score
         $score = 0;

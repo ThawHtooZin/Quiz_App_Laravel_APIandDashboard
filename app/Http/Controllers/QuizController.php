@@ -28,6 +28,7 @@ class QuizController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'time_limit' => 'nullable|integer|min:1',
+            'question_limit' => 'nullable|integer|min:1',
             'is_published' => 'boolean',
         ]);
 
@@ -55,6 +56,7 @@ class QuizController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'time_limit' => 'nullable|integer|min:1',
+            'question_limit' => 'nullable|integer|min:1',
             'is_published' => 'boolean',
         ]);
 
