@@ -30,7 +30,7 @@ class QuizDetailResource extends JsonResource
                 return [
                     'id' => $question->id,
                     'question_text' => $question->question_text,
-                    'options' => $question->options->shuffle()->map(function ($option) {
+                    'options' => $question->options->map(function ($option) {
                         return [
                             'id' => $option->id,
                             'text' => $option->text,

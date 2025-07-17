@@ -42,10 +42,7 @@ class QuizAttemptController extends Controller
             return redirect()->back()->with('error', 'This quiz has no questions.');
         }
 
-        // Shuffle options for each question
-        $questions->each(function ($question) {
-            $question->setRelation('options', $question->options->shuffle());
-        });
+        // Options are now in their original order (no shuffling)
 
         return view('quiz-attempts.take', compact('quiz', 'questions'));
     }
