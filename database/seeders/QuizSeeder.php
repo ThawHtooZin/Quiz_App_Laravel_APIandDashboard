@@ -14,12 +14,14 @@ class QuizSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create a test user
-        $user = User::create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        // Create a test user (or get existing one)
+        $user = User::firstOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => bcrypt('password'),
+            ]
+        );
 
         // Create sample quizzes
         $quizzes = [
@@ -27,6 +29,7 @@ class QuizSeeder extends Seeder
                 'title' => 'General Knowledge Quiz',
                 'description' => 'Test your general knowledge with this comprehensive quiz covering various topics.',
                 'time_limit' => 15,
+                'question_limit' => 5, // Only show 5 questions per attempt
                 'is_published' => true,
                 'questions' => [
                     [
@@ -106,6 +109,7 @@ class QuizSeeder extends Seeder
                 'title' => 'Math Quiz',
                 'description' => 'Test your mathematical skills with these challenging questions.',
                 'time_limit' => 10,
+                'question_limit' => 3, // Only show 3 questions per attempt
                 'is_published' => false,
                 'questions' => [
                     [
@@ -135,6 +139,7 @@ class QuizSeeder extends Seeder
                 'title' => $quizData['title'],
                 'description' => $quizData['description'],
                 'time_limit' => $quizData['time_limit'],
+                'question_limit' => $quizData['question_limit'] ?? null,
                 'is_published' => $quizData['is_published'],
             ]);
 

@@ -42,6 +42,16 @@
                 @enderror
             </div>
 
+            <div>
+                <label for="question_limit" class="block text-sm font-medium text-gray-700">Question Limit</label>
+                <input type="number" name="question_limit" id="question_limit" value="{{ old('question_limit', $quiz->question_limit) }}" min="1"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <p class="mt-1 text-sm text-gray-600">Number of questions to randomly select per attempt. Leave empty to use all questions.</p>
+                @error('question_limit')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="flex items-center">
                 <input type="checkbox" name="is_published" id="is_published" value="1" {{ old('is_published', $quiz->is_published) ? 'checked' : '' }}
                     class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">

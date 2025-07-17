@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('time_limit')->nullable(); // in minutes
-            $table->integer('question_limit')->nullable(); // number of questions to randomly select
             $table->boolean('is_published')->default(false);
             $table->timestamps();
         });

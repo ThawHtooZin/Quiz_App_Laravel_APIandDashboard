@@ -15,11 +15,13 @@ class Quiz extends Model
         'description',
         'time_limit',
         'is_published',
+        'question_limit',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'time_limit' => 'integer',
+        'question_limit' => 'integer',
     ];
 
     public function questions(): HasMany

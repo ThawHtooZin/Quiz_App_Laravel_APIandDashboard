@@ -35,6 +35,16 @@ class QuizAttemptController extends Controller
             return redirect()->back()->with('error', 'This quiz has no questions.');
         }
 
+        // Apply question pooling if question_limit is set
+        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
+            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
+        }
+
+        // Shuffle options for each question
+        $questions->each(function ($question) {
+            $question->setRelation('options', $question->options->shuffle());
+        });
+
         return view('quiz-attempts.take', compact('quiz', 'questions'));
     }
 
@@ -47,6 +57,12 @@ class QuizAttemptController extends Controller
         ]);
 
         $questions = $quiz->questions()->with('options')->get();
+        
+        // Apply question pooling if question_limit is set (same as in take method)
+        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
+            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
+        }
+        
         $score = 0;
 
         // Calculate score
@@ -60,7 +76,7 @@ class QuizAttemptController extends Controller
             }
         }
 
-        // Create quiz result
+        // Create quiz result (users can now retake quizzes)
         $quizResult = QuizResult::create([
             'user_id' => Auth::id(),
             'quiz_id' => $quiz->id,

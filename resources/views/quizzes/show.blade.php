@@ -20,10 +20,14 @@
             </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <div class="text-2xl font-bold text-blue-700">{{ $quiz->questions_count }}</div>
-                <div class="text-sm text-gray-700">Questions</div>
+                <div class="text-sm text-gray-700">Total Questions</div>
+            </div>
+            <div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">
+                <div class="text-2xl font-bold text-orange-700">{{ $quiz->question_limit ?: $quiz->questions_count }}</div>
+                <div class="text-sm text-gray-700">Per Attempt</div>
             </div>
             <div class="text-center p-4 bg-green-50 rounded-lg border border-green-200">
                 <div class="text-2xl font-bold text-green-700">{{ $quiz->total_attempts }}</div>

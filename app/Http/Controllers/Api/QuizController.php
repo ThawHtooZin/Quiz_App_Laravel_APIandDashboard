@@ -30,15 +30,7 @@ class QuizController extends Controller
             ], 404);
         }
 
-        $quiz->load([
-            'questions.options' => function ($query) {
-                $query->inRandomOrder();
-            }
-        ]);
-        
-        $questionLimit = $quiz->question_limit ?? $quiz->questions->count();
-        $shuffledQuestions = $quiz->questions->shuffle()->take($questionLimit);
-        $quiz->setRelation('questions', $shuffledQuestions);
+        $quiz->load(['questions.options']);
 
         return new QuizDetailResource($quiz);
     }
@@ -58,9 +50,16 @@ class QuizController extends Controller
             'time_taken' => 'nullable|integer|min:0',
         ]);
 
+        // Users can now retake quizzes - no restriction check needed
+
         // Calculate score
         $score = 0;
         $questions = $quiz->questions()->with('options')->get();
+        
+        // Apply question pooling if question_limit is set (same as in show method)
+        if ($quiz->question_limit && $questions->count() > $quiz->question_limit) {
+            $questions = $questions->inRandomOrder()->take($quiz->question_limit);
+        }
 
         foreach ($request->answers as $answer) {
             $question = $questions->find($answer['question_id']);
