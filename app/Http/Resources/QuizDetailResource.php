@@ -12,7 +12,8 @@ class QuizDetailResource extends JsonResource
         // Get questions with options and apply question pooling if question_limit is set
         $questionsQuery = $this->questions()->with('options');
         
-        if ($this->question_limit) {
+        // Only apply question limit if it's set and greater than 0
+        if ($this->question_limit && $this->question_limit > 0) {
             $questionsQuery = $questionsQuery->inRandomOrder()->take($this->question_limit);
         }
         

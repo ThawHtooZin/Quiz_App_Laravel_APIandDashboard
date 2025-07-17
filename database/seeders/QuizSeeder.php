@@ -18,8 +18,8 @@ class QuizSeeder extends Seeder
         $user = User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
-                'name' => 'Test User',
-                'password' => bcrypt('password'),
+            'name' => 'Test User',
+            'password' => bcrypt('password'),
             ]
         );
 
