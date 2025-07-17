@@ -162,6 +162,18 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
 - **Response:**
   - `201 Created`
   - Returns: `{ message, result: { id, score, total_questions, percentage, time_taken } }`
+  ```json
+  {
+    "message": "Quiz submitted successfully",
+    "result": {
+      "id": 123,
+      "score": 1,
+      "total_questions": 2,
+      "percentage": 50.0,
+      "time_taken": 45
+    }
+  }
+  ```
 
 ---
 
@@ -176,9 +188,9 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
     {
       "id": 1,
       "quiz": { "id": 1, "title": "General Knowledge", "description": "..." },
-      "score": 8,
-      "total_questions": 10,
-      "percentage": 80,
+      "score": 1,
+      "total_questions": 2,
+      "percentage": 50.0,
       "time_taken": 45,
       "formatted_time": "00:45",
       "attempted_at": "2024-07-15T08:40:00Z"
@@ -197,9 +209,9 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
   {
     "id": 1,
     "quiz": { "id": 1, "title": "General Knowledge", "description": "..." },
-    "score": 8,
-    "total_questions": 10,
-    "percentage": 80,
+    "score": 1,
+    "total_questions": 2,
+    "percentage": 50.0,
     "time_taken": 45,
     "formatted_time": "00:45",
     "attempted_at": "2024-07-15T08:40:00Z",
@@ -243,22 +255,23 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
   - Set `question_limit` when creating/editing a quiz
   - If `question_limit` is set and there are more questions available, the API randomly selects `question_limit` questions per attempt
   - If `question_limit` is null, all questions are shown
-- **Example:** A quiz with 20 questions and `question_limit: 10` will randomly show 10 different questions each time
+  - **Percentage calculation is based on actual questions shown, not total questions in quiz**
+- **Example:** A quiz with 20 questions and `question_limit: 10` will randomly show 10 different questions each time. If user gets 5 correct out of 10 shown, percentage = 50% (not 25%)
 
 ### Shuffled Options (ABCD Randomised)
 - **Purpose:** Prevent answer memorization by randomizing option order for each attempt.
 - **Implementation:**
-  - Options are shuffled at runtime for each quiz attempt
-  - Frontend should display options as A/B/C/D based on shuffled array index
+  - ~~Options are shuffled at runtime for each quiz attempt~~ **REMOVED** - Options are now in consistent order
+  - Frontend should display options as A/B/C/D based on array index
   - Submit `selected_option_id` (not "A" or "C") when answering
 - **Example:** 
   ```json
-  // Question 1 options (shuffled)
+  // Question 1 options (consistent order)
   "options": [
-    { "id": 4, "text": "Correct Answer" },
-    { "id": 2, "text": "Wrong Answer" },
     { "id": 1, "text": "Wrong Answer" },
-    { "id": 3, "text": "Wrong Answer" }
+    { "id": 2, "text": "Correct Answer" },
+    { "id": 3, "text": "Wrong Answer" },
+    { "id": 4, "text": "Wrong Answer" }
   ]
   ```
 
@@ -280,4 +293,5 @@ All protected endpoints require the `Authorization: Bearer <token>` header.
 - Quiz details never expose correct answers.
 - Quiz submission is allowed multiple times per quiz per user (retakes enabled).
 - Questions are randomly selected from the pool if `question_limit` is set.
-- Options are shuffled for each attempt to prevent answer memorization. 
+- Percentage calculation is based on actual questions shown, not total questions in quiz.
+- Options are in consistent order (shuffling removed). 

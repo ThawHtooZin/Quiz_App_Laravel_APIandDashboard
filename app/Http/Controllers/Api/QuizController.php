@@ -79,6 +79,7 @@ class QuizController extends Controller
             'quiz_id' => $quiz->id,
             'score' => $score,
             'time_taken' => $request->time_taken,
+            'questions_answered' => $questions->count(),
         ]);
 
         // Record answers

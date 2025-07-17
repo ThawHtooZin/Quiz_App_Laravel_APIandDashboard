@@ -43,7 +43,7 @@ class QuizResultController extends Controller
                 'description' => $result->quiz->description,
             ],
             'score' => $result->score,
-            'total_questions' => $result->quiz->questions->count(),
+            'total_questions' => $result->questions_answered ?: $result->quiz->questions->count(),
             'percentage' => $result->percentage,
             'time_taken' => $result->time_taken,
             'formatted_time' => $result->formatted_time,
@@ -51,25 +51,25 @@ class QuizResultController extends Controller
             'questions' => [],
         ];
 
-        // Build detailed question analysis
-        foreach ($result->quiz->questions as $question) {
-            $userAnswer = $result->answers->where('question_id', $question->id)->first();
-            $selectedOption = $userAnswer ? $userAnswer->selectedOption : null;
+        // Build detailed question analysis - only show questions that were actually answered
+        foreach ($result->answers as $answer) {
+            $question = $answer->question;
+            $selectedOption = $answer->selectedOption;
             $correctOption = $question->options->where('is_correct', true)->first();
 
             $detailedResult['questions'][] = [
                 'id' => $question->id,
                 'question_text' => $question->question_text,
-                'selected_answer' => $selectedOption ? [
+                'selected_answer' => [
                     'id' => $selectedOption->id,
                     'text' => $selectedOption->text,
                     'is_correct' => $selectedOption->is_correct,
-                ] : null,
+                ],
                 'correct_answer' => [
                     'id' => $correctOption->id,
                     'text' => $correctOption->text,
                 ],
-                'is_correct' => $selectedOption ? $selectedOption->is_correct : false,
+                'is_correct' => $selectedOption->is_correct,
             ];
         }
 

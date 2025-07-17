@@ -16,11 +16,13 @@ class QuizResult extends Model
         'quiz_id',
         'score',
         'time_taken',
+        'questions_answered',
     ];
 
     protected $casts = [
         'score' => 'integer',
         'time_taken' => 'integer',
+        'questions_answered' => 'integer',
     ];
 
     public function user(): BelongsTo
@@ -40,7 +42,8 @@ class QuizResult extends Model
 
     public function getPercentageAttribute()
     {
-        $totalQuestions = $this->quiz->questions()->count();
+        // Use questions_answered if available, otherwise fall back to total quiz questions
+        $totalQuestions = $this->questions_answered ?: $this->quiz->questions()->count();
         if ($totalQuestions === 0) {
             return 0;
         }

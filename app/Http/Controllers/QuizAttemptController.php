@@ -83,6 +83,7 @@ class QuizAttemptController extends Controller
             'quiz_id' => $quiz->id,
             'score' => $score,
             'time_taken' => $validated['time_taken'] ?? null,
+            'questions_answered' => $questions->count(),
         ]);
 
         // Record answers
