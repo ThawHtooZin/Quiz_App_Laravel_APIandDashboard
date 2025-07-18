@@ -52,20 +52,15 @@ class QuizController extends Controller
 
         // Users can now retake quizzes - no restriction check needed
 
-        // Calculate score
+        // Calculate score based on user's answers
         $score = 0;
-        $questionsQuery = $quiz->questions()->with('options');
+        $answeredQuestionsCount = 0;
         
-        // Apply question pooling if question_limit is set (same as in show method)
-        if ($quiz->question_limit) {
-            $questionsQuery = $questionsQuery->inRandomOrder()->take($quiz->question_limit);
-        }
-        
-        $questions = $questionsQuery->get();
-
         foreach ($request->answers as $answer) {
-            $question = $questions->find($answer['question_id']);
+            // Get the specific question and its options
+            $question = $quiz->questions()->with('options')->find($answer['question_id']);
             if ($question) {
+                $answeredQuestionsCount++;
                 $selectedOption = $question->options->find($answer['selected_option_id']);
                 if ($selectedOption && $selectedOption->is_correct) {
                     $score++;
@@ -79,7 +74,7 @@ class QuizController extends Controller
             'quiz_id' => $quiz->id,
             'score' => $score,
             'time_taken' => $request->time_taken,
-            'questions_answered' => $questions->count(),
+            'questions_answered' => $answeredQuestionsCount,
         ]);
 
         // Record answers
@@ -96,8 +91,8 @@ class QuizController extends Controller
             'result' => [
                 'id' => $quizResult->id,
                 'score' => $score,
-                'total_questions' => $questions->count(),
-                'percentage' => round(($score / $questions->count()) * 100, 2),
+                'total_questions' => $answeredQuestionsCount,
+                'percentage' => round(($score / $answeredQuestionsCount) * 100, 2),
                 'time_taken' => $request->time_taken,
             ],
         ], 201);
