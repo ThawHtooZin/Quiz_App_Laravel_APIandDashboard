@@ -17,7 +17,7 @@ class QuizResultResource extends JsonResource
                 'description' => $this->quiz->description,
             ],
             'score' => $this->score,
-            'total_questions' => $this->questions_answered ?: $this->quiz->questions()->count(),
+            'total_questions' => $this->questions_answered,
             'percentage' => $this->percentage,
             'time_taken' => $this->time_taken,
             'formatted_time' => $this->formatted_time,
